@@ -46,7 +46,11 @@
   };
 
   const handleClearData = async () => {
-    if (!confirm('This will clear ALL local data including your diagrams, themes, workspace files, and settings. This cannot be undone.\n\nAre you sure?')) {
+    if (
+      !confirm(
+        'This will clear ALL local data including your diagrams, themes, workspace files, and settings. This cannot be undone.\n\nAre you sure?'
+      )
+    ) {
       return;
     }
     try {
@@ -105,11 +109,11 @@
     </div>
     <div class="flex items-center justify-between">
       <div class="flex flex-col gap-0.5">
-          <Label for="performance-mode" class="flex items-center gap-1.5">
-            <ZapIcon class="size-3.5 text-amber-500" />
-            Performance Mode
-          </Label>
-          <span class="text-[10px] text-muted-foreground">Optimize for large diagrams</span>
+        <Label for="performance-mode" class="flex items-center gap-1.5">
+          <ZapIcon class="size-3.5 text-amber-500" />
+          Performance Mode
+        </Label>
+        <span class="text-[10px] text-muted-foreground">Optimize for large diagrams</span>
       </div>
       <Switch id="performance-mode" checked={performanceMode} onCheckedChange={togglePerformance} />
     </div>

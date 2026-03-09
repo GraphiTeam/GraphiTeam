@@ -32,35 +32,36 @@
   ];
 </script>
 
-<aside class="flex h-full w-12 shrink-0 flex-col items-center justify-between border-r border-border bg-background py-4 theme-transition z-40">
+<aside
+  class="theme-transition z-40 flex h-full w-12 shrink-0 flex-col items-center justify-between border-r border-border bg-background py-4">
   <div class="flex flex-col items-center gap-3">
     {#each primaryActions as action (action.id)}
       <button
         class={cn(
-          'p-2 rounded-lg transition-all',
+          'rounded-lg p-2 transition-all',
           activeView === action.id
-            ? 'text-primary bg-primary/10 shadow-sm'
-            : 'text-muted-foreground hover:text-primary hover:bg-muted/50 w-full'
+            ? 'bg-primary/10 text-primary shadow-sm'
+            : 'w-full text-muted-foreground hover:bg-muted/50 hover:text-primary'
         )}
         onclick={() => onViewChange(activeView === action.id ? '' : action.id)}
         title={action.label}>
-        <action.icon class="w-5 h-5 mx-auto" />
+        <action.icon class="mx-auto h-5 w-5" />
       </button>
     {/each}
   </div>
-  
-  <div class="flex flex-col items-center gap-3 mt-auto">
+
+  <div class="mt-auto flex flex-col items-center gap-3">
     {#each secondaryActions as action (action.id)}
       <button
         class={cn(
-          'p-2 rounded-lg transition-all',
+          'rounded-lg p-2 transition-all',
           activeView === action.id
-            ? 'text-primary bg-primary/10 shadow-sm w-full'
-            : 'text-muted-foreground hover:text-primary hover:bg-muted/50 w-full'
+            ? 'w-full bg-primary/10 text-primary shadow-sm'
+            : 'w-full text-muted-foreground hover:bg-muted/50 hover:text-primary'
         )}
         onclick={() => onViewChange(activeView === action.id ? '' : action.id)}
         title={action.label}>
-        <action.icon class="w-5 h-5 mx-auto" />
+        <action.icon class="mx-auto h-5 w-5" />
       </button>
     {/each}
   </div>

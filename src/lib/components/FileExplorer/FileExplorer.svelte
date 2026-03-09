@@ -278,7 +278,8 @@
               variant="ghost"
               size="icon"
               class="size-6"
-              onclick={() => createVirtualFile('Untitled Diagram', 'flowchart TD\n  Start --> Stop')}
+              onclick={() =>
+                createVirtualFile('Untitled Diagram', 'flowchart TD\n  Start --> Stop')}
               title="New Diagram">
               <AddFileIcon class="size-3.5" />
             </Button>
@@ -294,7 +295,7 @@
         </div>
         <div class="flex-1 overflow-y-auto p-1">
           {#if siteTree.length === 0}
-            <div class="flex h-32 flex-col items-center justify-center text-center p-4">
+            <div class="flex h-32 flex-col items-center justify-center p-4 text-center">
               <p class="text-[10px] text-muted-foreground italic">No cloud diagrams yet.</p>
             </div>
           {:else}
@@ -349,14 +350,18 @@
         </div>
         <div class="flex-1 overflow-y-auto p-1 text-card-foreground">
           {#if $fileList.length === 0}
-            <div class="flex h-32 flex-col items-center justify-center gap-4 text-center p-4">
+            <div class="flex h-32 flex-col items-center justify-center gap-4 p-4 text-center">
               <div class="opacity-40">
-                <FolderIcon class="mx-auto size-8 mb-2" />
-                <p class="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                <FolderIcon class="mx-auto mb-2 size-8" />
+                <p class="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                   Not Linked
                 </p>
               </div>
-              <Button variant="outline" size="sm" class="h-8 text-[10px] uppercase font-bold" onclick={openDirectory}>
+              <Button
+                variant="outline"
+                size="sm"
+                class="h-8 text-[10px] font-bold uppercase"
+                onclick={openDirectory}>
                 Open Folder
               </Button>
             </div>
@@ -389,16 +394,14 @@
       class={cn(
         'group flex w-full items-center gap-2 rounded px-2 transition-colors hover:bg-muted/50',
         $activeVirtualFileId === item.id && 'bg-accent/15 ring-1 ring-accent/30',
-        dragHoverItemId === item.id && 'bg-accent/30 outline-dashed outline-1 outline-accent'
+        dragHoverItemId === item.id && 'bg-accent/30 outline-1 outline-accent outline-dashed'
       )}
       style="padding-left: {depth * 12 + 8}px">
       <button
         class="flex flex-1 items-center gap-2 overflow-hidden py-1.5"
         onclick={() => (item.isFolder ? toggleExpand(item.id) : loadVirtualFile(item.id))}>
         {#if item.isFolder}
-          <span
-            class="text-muted-foreground"
-            class:rotate-90={expansionStore[item.id]}>
+          <span class="text-muted-foreground" class:rotate-90={expansionStore[item.id]}>
             <ChevronRight class="size-3.5" />
           </span>
           <FolderIcon class="size-3.5 shrink-0 text-primary opacity-80" />
@@ -511,7 +514,8 @@
             size="icon"
             class={cn(
               'size-6 opacity-0 group-hover:opacity-100',
-              (isMobile || entry.name.includes('re-authorize') || entry.name.includes('Error')) && 'opacity-100'
+              (isMobile || entry.name.includes('re-authorize') || entry.name.includes('Error')) &&
+                'opacity-100'
             )}
             onclick={(e) => {
               e.stopPropagation();
@@ -554,10 +558,7 @@
           <Button
             variant="ghost"
             size="icon"
-            class={cn(
-              "size-6 opacity-0 group-hover:opacity-100",
-              isMobile && "opacity-100"
-            )}
+            class={cn('size-6 opacity-0 group-hover:opacity-100', isMobile && 'opacity-100')}
             onclick={(e) => {
               e.stopPropagation();
               removeFile(entry.path);
@@ -567,10 +568,11 @@
           </Button>
         {/if}
 
-        <div class={cn(
-          "flex items-center gap-0 opacity-0 group-hover:opacity-100",
-          isMobile && "opacity-100"
-        )}>
+        <div
+          class={cn(
+            'flex items-center gap-0 opacity-0 group-hover:opacity-100',
+            isMobile && 'opacity-100'
+          )}>
           <Popover.Root
             open={popoverOpen[entry.path] || false}
             onOpenChange={(v) => (popoverOpen[entry.path] = v)}>

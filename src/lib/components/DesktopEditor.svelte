@@ -55,15 +55,9 @@
       ]
     });
 
-
-
     initEditor(monaco);
-    
-    jsonModel = monaco.editor.createModel(
-      '',
-      'json',
-      monaco.Uri.parse('internal://config.json')
-    );
+
+    jsonModel = monaco.editor.createModel('', 'json', monaco.Uri.parse('internal://config.json'));
     mermaidModel = monaco.editor.createModel(
       '',
       'mermaid',
@@ -156,8 +150,9 @@
   <div bind:this={divElement} id="editor" class="h-full w-full"></div>
 
   <!-- Floating UI over the editor -->
-  <div class="absolute right-4 top-4 z-10 flex gap-2">
-    <div class="rounded-md border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <div class="absolute top-4 right-4 z-10 flex gap-2">
+    <div
+      class="rounded-md border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <IconPicker onInsert={handleInsertIcon} />
     </div>
   </div>

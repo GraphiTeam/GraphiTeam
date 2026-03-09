@@ -67,7 +67,9 @@
     </div>
   {/if}
   {#if showError && $stateStore.error instanceof Error}
-    <div class="flex flex-none flex-col text-sm border-t border-border" data-testid={TID.errorContainer}>
+    <div
+      class="flex flex-none flex-col border-t border-border text-sm"
+      data-testid={TID.errorContainer}>
       <div class="flex items-center justify-between gap-2 bg-slate-900 p-2 text-white">
         <div class="flex w-fit items-center gap-2">
           <ExclamationCircleIcon class="size-6 text-destructive" aria-hidden="true" />

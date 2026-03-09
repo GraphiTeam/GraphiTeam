@@ -119,12 +119,16 @@
 
     <div class="mt-2 flex items-center justify-between gap-2">
       <div class="flex gap-2">
-        <Button variant="ghost" size="sm" class="text-[10px] font-bold uppercase" onclick={selectAll}
-          >Select All</Button
-        >
-        <Button variant="ghost" size="sm" class="text-[10px] font-bold uppercase" onclick={selectNone}
-          >Clear</Button
-        >
+        <Button
+          variant="ghost"
+          size="sm"
+          class="text-[10px] font-bold uppercase"
+          onclick={selectAll}>Select All</Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          class="text-[10px] font-bold uppercase"
+          onclick={selectNone}>Clear</Button>
       </div>
       <Button disabled={selectedIds.size === 0} onclick={handleExport} class="gap-2">
         <DownloadIcon class="size-4" />
@@ -143,8 +147,7 @@
         type="checkbox"
         checked={selectedIds.has(item.id)}
         onchange={() => toggleSelect(item.id, item.isFolder)}
-        class="size-4 focus-visible:ring-ring border-primary rounded-sm transition-all focus-visible:ring-2"
-      />
+        class="size-4 rounded-sm border-primary transition-all focus-visible:ring-2 focus-visible:ring-ring" />
 
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->

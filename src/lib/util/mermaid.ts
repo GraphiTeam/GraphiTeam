@@ -12,7 +12,11 @@ export const azureIconsMap = new Map<string, { body: string; width: number; heig
 
 const registerIconsPromise = (async () => {
   try {
-    const azureIconsSvg = import.meta.glob('/static/icons/Azure_Icons/Icons/**/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+    const azureIconsSvg = import.meta.glob('/static/icons/Azure_Icons/Icons/**/*.svg', {
+      query: '?raw',
+      import: 'default',
+      eager: true
+    }) as Record<string, string>;
     const azureIconsData: Record<string, any> = {};
 
     for (const [path, svgContent] of Object.entries(azureIconsSvg)) {
@@ -22,8 +26,9 @@ const registerIconsPromise = (async () => {
 
       const bodyMatch = svgContent.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
       if (!bodyMatch) continue;
-      
-      let width = 18, height = 18;
+
+      let width = 18,
+        height = 18;
       const viewBoxMatch = svgContent.match(/viewBox="([^"]+)"/i);
       if (viewBoxMatch) {
         const parts = viewBoxMatch[1].split(/[ ,]+/);
@@ -52,14 +57,17 @@ const registerIconsPromise = (async () => {
       }
     ]);
 
-    const collectionsRes = await fetch('https://raw.githubusercontent.com/iconify/icon-sets/master/collections.json');
+    const collectionsRes = await fetch(
+      'https://raw.githubusercontent.com/iconify/icon-sets/master/collections.json'
+    );
     const collections = await collectionsRes.json();
-    
+
     const packs = Object.keys(collections).map((prefix) => ({
       name: prefix,
-      loader: () => fetch(`https://unpkg.com/@iconify-json/${prefix}@1/icons.json`).then((res) => res.json())
+      loader: () =>
+        fetch(`https://unpkg.com/@iconify-json/${prefix}@1/icons.json`).then((res) => res.json())
     }));
-    
+
     mermaid.registerIconPacks(packs);
   } catch (e) {
     console.error('Failed to register icons:', e);

@@ -265,6 +265,7 @@ export async function writeFile(fileHandle: FileSystemFileHandle, content: strin
     const writable = await fileHandle.createWritable();
     await writable.write(content);
     await writable.close();
+    console.log(`Successfully finished write to ${fileHandle.name}`);
 
     const { unpackFileContent } = await import('./fileContent');
     const { code: rawCode } = unpackFileContent(content);
@@ -295,6 +296,7 @@ export async function saveActiveFile(content: string): Promise<boolean> {
       saveStatus.set('saving');
       file.content = content;
       await updateVirtualItem(file);
+      console.log(`Successfully updated virtual file: ${file.name} (${virtualId})`);
 
       const { unpackFileContent } = await import('./fileContent');
       const { code: rawCode } = unpackFileContent(content);

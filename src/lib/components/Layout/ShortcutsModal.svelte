@@ -22,16 +22,16 @@
         <KeyboardIcon class="size-5" />
         Keyboard Shortcuts
       </Dialog.Title>
-      <Dialog.Description>
-        Common keyboard shortcuts for the Graphi Editor.
-      </Dialog.Description>
+      <Dialog.Description>Common keyboard shortcuts for the Graphi Editor.</Dialog.Description>
     </Dialog.Header>
     <div class="grid gap-4 py-4">
       <div class="space-y-3">
         {#each shortcuts as shortcut}
-          <div class="flex items-center justify-between border-b border-border/50 pb-2 last:border-0">
-            <span class="text-sm text-foreground font-medium">{shortcut.description}</span>
-            <kbd class="pointer-events-none inline-flex h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+          <div
+            class="flex items-center justify-between border-b border-border/50 pb-2 last:border-0">
+            <span class="text-sm font-medium text-foreground">{shortcut.description}</span>
+            <kbd
+              class="pointer-events-none inline-flex h-6 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 select-none">
               {shortcut.key}
             </kbd>
           </div>

@@ -97,7 +97,7 @@
           diagramType: detectedDiagramType
         } = await renderDiagram(mermaidConfig, code, viewID);
         diagramType = detectedDiagramType;
-        
+
         // Prevent Mermaid's fallback error SVG from overwriting the last valid diagram
         // We use DOMParser because Mermaid v11+ includes ".error-icon" in the CSS block of valid diagrams
         const parser = new DOMParser();
@@ -152,7 +152,9 @@
       console.error('view fail', error_);
       error = true;
       // Clean up any Mermaid sandbox elements that leaked into the body
-      document.querySelectorAll('[id^="dgraph-"], #d-error, svg[id^="mermaid-"]').forEach(el => el.remove());
+      document
+        .querySelectorAll('[id^="dgraph-"], #d-error, svg[id^="mermaid-"]')
+        .forEach((el) => el.remove());
     }
     const renderTime = Date.now() - startTime;
     saveStatistics({ code, diagramType, isRough: state.rough, renderTime });
@@ -177,7 +179,11 @@
 <div
   id="view"
   bind:this={view}
-  class={['h-full w-full', shouldShowGrid && `grid-bg-${$mode}`, error && 'opacity-20 pointer-events-none']}>
+  class={[
+    'h-full w-full',
+    shouldShowGrid && `grid-bg-${$mode}`,
+    error && 'pointer-events-none opacity-20'
+  ]}>
   <div id="container" bind:this={container} class="h-full overflow-auto"></div>
 </div>
 

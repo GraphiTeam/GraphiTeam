@@ -24,13 +24,16 @@
 
   $effect(() => {
     if (typeof window !== 'undefined' && (stateStore as any).exportBackground) {
-        exportBackground = (stateStore as any).exportBackground;
+      exportBackground = (stateStore as any).exportBackground;
     }
   });
 
   $effect(() => {
-    if (typeof window !== 'undefined' && (stateStore as any).exportBackground !== exportBackground) {
-        inputStateStore.update((s: any) => ({ ...s, exportBackground }));
+    if (
+      typeof window !== 'undefined' &&
+      (stateStore as any).exportBackground !== exportBackground
+    ) {
+      inputStateStore.update((s: any) => ({ ...s, exportBackground }));
     }
   });
 
@@ -52,7 +55,7 @@
     } else {
       svgToUse = getSvgElement();
     }
-    
+
     if (!svgToUse) return '';
 
     if (height) {
@@ -159,9 +162,9 @@ ${svgString}`);
           const nav = (typeof window !== 'undefined' ? window.navigator : null) as any;
           if (nav && nav.clipboard && 'write' in nav.clipboard) {
             void nav.clipboard.write([
-                new (window as any).ClipboardItem({
+              new (window as any).ClipboardItem({
                 [blob.type]: blob
-                })
+              })
             ]);
           }
         } catch (error) {
@@ -198,21 +201,22 @@ ${svgString}`);
 
     const svg = getSvgElement();
     if (!svg) return;
-    
+
     // Ensure the SVG fills the container for PDF export
     svg.removeAttribute('width');
     svg.removeAttribute('height');
     svg.style.maxWidth = '100%';
     svg.style.width = '100%';
     svg.style.height = '100%';
-    
+
     const svgHTML = svg.outerHTML
       .replaceAll('<br>', '<br/>')
       .replaceAll(/<img([^>]*)>/g, (m: string, g: string) => `<img ${g} />`);
 
     const printWindow = window.open('', '_blank');
     if (printWindow) {
-      printWindow.document.write(`
+      printWindow.document.write(
+        `
         <!DOCTYPE html>
         <html>
           <head>
@@ -249,47 +253,55 @@ ${svgString}`);
             <div class="container">
               ${svgHTML}
             </div>
-            <scr` + `ipt>
+            <scr` +
+          `ipt>
               window.onload = () => {
                 setTimeout(() => {
                     window.print();
                     // window.close(); // Keep it open for user to manually close if print fails or to preview
                 }, 1000);
               };
-            </scr` + `ipt>
+            </scr` +
+          `ipt>
           </body>
         </html>
-      `);
+      `
+      );
       printWindow.document.close();
     }
     (inputStateStore as any).update((s: any) => ({ ...s, panZoom: true }));
     logEvent('download', { type: 'pdf' });
   };
-
 </script>
 
 <div class="flex min-w-fit flex-col gap-4 p-4">
   <!-- Size Configuration -->
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
-        <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Image Size</span>
-        <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">Px</span>
+      <span class="text-[10px] font-bold tracking-wider text-muted-foreground uppercase"
+        >Image Size</span>
+      <span class="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+        >Px</span>
     </div>
     <ToggleGroup.Root
       type="single"
       variant="outline"
       bind:value={imageSizeMode}
-      class="w-full justify-start h-8">
-      <ToggleGroup.Item value="auto" class="flex-1 text-xs px-2">Auto</ToggleGroup.Item>
-      <ToggleGroup.Item value="width" class="flex-1 text-xs px-2">Width</ToggleGroup.Item>
-      <ToggleGroup.Item value="height" class="flex-1 text-xs px-2">Height</ToggleGroup.Item>
+      class="h-8 w-full justify-start">
+      <ToggleGroup.Item value="auto" class="flex-1 px-2 text-xs">Auto</ToggleGroup.Item>
+      <ToggleGroup.Item value="width" class="flex-1 px-2 text-xs">Width</ToggleGroup.Item>
+      <ToggleGroup.Item value="height" class="flex-1 px-2 text-xs">Height</ToggleGroup.Item>
     </ToggleGroup.Root>
 
     {#if imageSizeMode !== 'auto'}
-        <div class="flex items-center gap-2">
-            <WidthIcon class={['size-4 shrink-0 text-muted-foreground transition-all', imageSizeMode === 'width' && 'rotate-90']} />
-            <Input type="number" min="3" max="10000" bind:value={imageSize} class="h-8 text-xs" />
-        </div>
+      <div class="flex items-center gap-2">
+        <WidthIcon
+          class={[
+            'size-4 shrink-0 text-muted-foreground transition-all',
+            imageSizeMode === 'width' && 'rotate-90'
+          ]} />
+        <Input type="number" min="3" max="10000" bind:value={imageSize} class="h-8 text-xs" />
+      </div>
     {/if}
   </div>
 
@@ -298,22 +310,35 @@ ${svgString}`);
   <!-- Background Configuration -->
   <div class="flex flex-col gap-3">
     <div class="flex items-center justify-between">
-        <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Background</span>
-        <PaletteIcon class="size-3.5 text-muted-foreground" />
+      <span class="text-[10px] font-bold tracking-wider text-muted-foreground uppercase"
+        >Background</span>
+      <PaletteIcon class="size-3.5 text-muted-foreground" />
     </div>
-    
+
     <div class="flex flex-col gap-2">
-        <div class="flex items-center justify-between">
-            <label for="transparent-bg" class="cursor-pointer text-xs text-foreground font-medium select-none">Transparent</label>
-            <input id="transparent-bg" type="checkbox" bind:checked={isTransparent} class="size-3.5 rounded border-border bg-background text-primary focus:ring-primary" />
+      <div class="flex items-center justify-between">
+        <label
+          for="transparent-bg"
+          class="cursor-pointer text-xs font-medium text-foreground select-none">Transparent</label>
+        <input
+          id="transparent-bg"
+          type="checkbox"
+          bind:checked={isTransparent}
+          class="size-3.5 rounded border-border bg-background text-primary focus:ring-primary" />
+      </div>
+
+      {#if !isTransparent}
+        <div class="flex items-center gap-2">
+          <input
+            type="color"
+            bind:value={exportBackground}
+            class="size-6 cursor-pointer overflow-hidden rounded border-0 bg-transparent p-0" />
+          <Input
+            type="text"
+            bind:value={exportBackground}
+            class="h-7 px-2 font-mono text-[10px] uppercase" />
         </div>
-        
-        {#if !isTransparent}
-            <div class="flex items-center gap-2">
-                <input type="color" bind:value={exportBackground} class="size-6 p-0 border-0 bg-transparent cursor-pointer rounded overflow-hidden" />
-                <Input type="text" bind:value={exportBackground} class="h-7 text-[10px] font-mono uppercase px-2" />
-            </div>
-        {/if}
+      {/if}
     </div>
   </div>
 
@@ -321,33 +346,46 @@ ${svgString}`);
 
   <!-- Export Actions -->
   <div class="flex flex-col gap-2">
-    <div class="flex items-center justify-between mb-1">
-        <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider font-bold">Export Format</span>
+    <div class="mb-1 flex items-center justify-between">
+      <span class="text-[10px] font-bold tracking-wider text-muted-foreground uppercase"
+        >Export Format</span>
     </div>
-    
+
     <div class="grid grid-cols-2 gap-2">
-        <Button variant="secondary" size="sm" onclick={onDownloadPNG} class="h-8 gap-2 text-xs font-bold">
-            <DownloadIcon class="size-3.5" /> PNG
-        </Button>
-        <Button variant="secondary" size="sm" onclick={onDownloadSVG} class="h-8 gap-2 text-xs font-bold">
-            <DownloadIcon class="size-3.5" /> SVG
-        </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onclick={onDownloadPNG}
+        class="h-8 gap-2 text-xs font-bold">
+        <DownloadIcon class="size-3.5" /> PNG
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onclick={onDownloadSVG}
+        class="h-8 gap-2 text-xs font-bold">
+        <DownloadIcon class="size-3.5" /> SVG
+      </Button>
     </div>
-    
-    <Button variant="secondary" size="sm" onclick={onDownloadPDF} class="h-8 gap-2 text-xs font-bold w-full">
-        <PrintIcon class="size-3.5" /> Export as PDF
+
+    <Button
+      variant="secondary"
+      size="sm"
+      onclick={onDownloadPDF}
+      class="h-8 w-full gap-2 text-xs font-bold">
+      <PrintIcon class="size-3.5" /> Export as PDF
     </Button>
 
     {#if isClipboardAvailable()}
-        <div class="mt-2">
-            <CopyButton onclick={onCopyClipboard} label="Copy to Clipboard" />
-        </div>
+      <div class="mt-2">
+        <CopyButton onclick={onCopyClipboard} label="Copy to Clipboard" />
+      </div>
     {/if}
   </div>
 
-  <div class="mt-4 p-3 rounded-lg bg-orange-500/5 border border-orange-500/20">
-    <p class="text-[10px] text-orange-600/80 leading-relaxed font-medium">
-        Tip: PDF export works best with high-resolution settings for large diagrams.
+  <div class="mt-4 rounded-lg border border-orange-500/20 bg-orange-500/5 p-3">
+    <p class="text-[10px] leading-relaxed font-medium text-orange-600/80">
+      Tip: PDF export works best with high-resolution settings for large diagrams.
     </p>
   </div>
 </div>

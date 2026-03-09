@@ -46,7 +46,7 @@ jobs:
 
       - name: Build Web Application
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: '--max-old-space-size=4096'
         run: pnpm build
 
       - name: Build Desktop Application
@@ -69,7 +69,7 @@ jobs:
         run: |
           # 1. Zip the app assets (This becomes the manual install file)
           Compress-Archive -Path "DesktopApp/dist-packager/Graphi Desktop-win32-x64/*" -DestinationPath "${{ matrix.artifact_name }}" -Force
-          
+
           # 2. Get the Squirrel installer
           $customInstaller = Get-ChildItem -Path "DesktopApp/dist-installer/*.exe" | Select-Object -First 1
           if ($customInstaller) {

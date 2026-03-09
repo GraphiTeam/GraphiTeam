@@ -18,11 +18,19 @@ export class EditorPage {
     await expect(this.page)
       .toHaveURL(/.*\/edit#pako/, { timeout: 10000 })
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .catch(() => { });
+      .catch(() => {});
   }
 
   async setAdvancedMode() {
-    const isAdvanced = await this.page.getByText('Advanced').locator('xpath=preceding-sibling::button').getAttribute('data-state') === 'on' || await this.page.locator('button[data-state="on"]').evaluate((node) => node.parentElement?.textContent?.includes('Advanced')).catch(() => false);
+    const isAdvanced =
+      (await this.page
+        .getByText('Advanced')
+        .locator('xpath=preceding-sibling::button')
+        .getAttribute('data-state')) === 'on' ||
+      (await this.page
+        .locator('button[data-state="on"]')
+        .evaluate((node) => node.parentElement?.textContent?.includes('Advanced'))
+        .catch(() => false));
     if (!isAdvanced) {
       await this.page.getByText('Advanced').click();
     }

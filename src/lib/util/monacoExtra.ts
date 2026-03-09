@@ -587,8 +587,6 @@ export const initEditor = (monacoEditor: typeof Monaco): void => {
     ]
   });
 
-
-
   monacoEditor.languages.setLanguageConfiguration('mermaid', {
     autoClosingPairs: [
       {

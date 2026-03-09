@@ -38,7 +38,7 @@
   import { scheduleAutoSave } from '$/util/historyStore';
   import AIIcon from '~icons/material-symbols/auto-awesome';
   import CheckIcon from '~icons/material-symbols/check-circle-outline';
-  import { Toggle } from "$/components/ui/toggle";
+  import { Toggle } from '$/components/ui/toggle';
   import ShortcutsModal from '$/components/Layout/ShortcutsModal.svelte';
 
   const panZoomState = new PanZoomState();
@@ -59,7 +59,7 @@
 
   onMount(async () => {
     await initHandler();
-    
+
     const onHashChange = () => {
       void initHandler();
     };
@@ -78,7 +78,7 @@
   let activeSideBarView = $state('explorer');
   let showAISidebar = $state(false);
   let isShortcutsOpen = $state(false);
-  
+
   // NEW: Simple vs Advanced Mode (Synced with store)
   let isAdvancedMode = $derived($stateStore.isAdvancedMode);
   const toggleMode = (pressed: boolean) => {
@@ -121,6 +121,7 @@
     const packed = packFileContent(code, $stateStore.mermaid);
 
     if (virtualId) {
+      console.log('Autosaving virtual file:', virtualId);
       await saveActiveFile(packed);
       return;
     }
@@ -130,6 +131,7 @@
         // @ts-expect-error - File System API types are experimental
         const permission = await handle.queryPermission({ mode: 'readwrite' });
         if (permission === 'granted') {
+          console.log('Autosaving handle:', handle.name);
           await writeFile(handle, packed);
         } else {
           saveStatus.set('blocked');
@@ -138,7 +140,7 @@
         console.error('Autosave failed:', error);
       }
     }
-  }, 60000);
+  }, 15000);
 
   $effect(() => {
     if ((!!$activeFileHandle || !!$activeVirtualFileId) && isDirty) {
@@ -166,82 +168,101 @@
 {:else}
   <div class="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground">
     <!-- Clean Header -->
-    <header class="flex h-12 shrink-0 items-center justify-between border-b border-border px-4 bg-background z-50 transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm rotate-3">
-                    G
-                </div>
-                <span class="font-bold tracking-tight flex items-center gap-2">
-                    Graphi 
-                    <span class="text-xs font-normal text-muted-foreground italic flex items-center gap-1">
-                      / 
-                      {#if $activeVirtualFileId}
-                        {siteFiles.find(f => f.id === $activeVirtualFileId)?.name || 'Untitled Diagram'}
-                      {:else}
-                        {$activeFileHandle?.name || 'Untitled Diagram'}
-                      {/if}
-                      {#if isDirty}
-                        <span class="text-primary text-[10px] ml-0.5">●</span>
-                      {/if}
-                    </span>
-                </span>
-            </div>
-            
-            <div class="h-4 w-[1px] bg-border mx-2"></div>
-            
-            {#if isAdvancedMode}
-              <MainMenu />
-            {/if}
-        </div>
-
-        <div class="flex items-center gap-3">
-            <!-- Save Status -->
-            <div class="flex justify-end min-w-[60px] text-[10px] uppercase font-bold tracking-wider mr-2">
-              {#if $saveStatus === 'saving'}
-                <span class="animate-pulse text-muted-foreground">Saving...</span>
-              {:else if $saveStatus === 'success'}
-                <span class="text-green-600 dark:text-green-400 flex items-center gap-1 animate-out fade-out duration-1000 fill-mode-forwards">
-                  <CheckIcon class="size-3.5" />
-                  Saved
-                </span>
-              {:else if $saveStatus === 'blocked'}
-                <span class="text-destructive text-[9px] cursor-help" title="Click Save button to grant permission">Need Permission</span>
+    <header
+      class="z-50 flex h-12 shrink-0 items-center justify-between border-b border-border bg-background px-4 transition-all duration-300">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <div
+            class="flex h-7 w-7 rotate-3 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white shadow-sm">
+            G
+          </div>
+          <span class="flex items-center gap-2 font-bold tracking-tight">
+            Graphi
+            <span class="flex items-center gap-1 text-xs font-normal text-muted-foreground italic">
+              /
+              {#if $activeVirtualFileId}
+                {siteFiles.find((f) => f.id === $activeVirtualFileId)?.name || 'Untitled Diagram'}
+              {:else}
+                {$activeFileHandle?.name || 'Untitled Diagram'}
               {/if}
-            </div>
-
-            <!-- Mode Toggle -->
-            <label class="flex items-center gap-2 text-xs font-semibold cursor-pointer border border-border px-2 py-1 rounded-md bg-muted/20 hover:bg-muted/40 transition-colors">
-              <span class="text-muted-foreground {isAdvancedMode ? '' : 'text-foreground'}">Simple</span>
-              <Toggle 
-                pressed={isAdvancedMode} 
-                onPressedChange={toggleMode}
-                size="sm" 
-                class="h-5 w-8 data-[state=on]:bg-primary rounded-full p-0">
-                 <div class="h-3 w-3 bg-white rounded-full transition-transform {isAdvancedMode ? 'translate-x-1.5' : '-translate-x-1.5'} shadow-sm"></div>
-              </Toggle>
-              <span class="text-muted-foreground {isAdvancedMode ? 'text-foreground' : ''}">Advanced</span>
-            </label>
-
-            <!-- Actions -->
-            <div class="flex items-center gap-1 border border-border bg-muted/20 rounded-md p-1 shadow-sm">
-                <Button variant="default" size="sm" onclick={handleSaveDiagram} title="Save to File" class="h-7 px-3 text-xs gap-1.5 font-bold">
-                    <SaveIcon class="size-3.5" />
-                    Save
-                </Button>
-                <div class="h-4 w-[1px] bg-border mx-1"></div>
-                <Share />
-            </div>
-            
-            <Button
-                variant={showAISidebar ? 'secondary' : 'ghost'}
-                size="icon"
-                onclick={() => (showAISidebar = !showAISidebar)}
-                title="AI Assistant"
-                class="size-8 rounded-full text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/50">
-                <AIIcon class="size-5" />
-            </Button>
+              {#if isDirty}
+                <span class="ml-0.5 text-[10px] text-primary">●</span>
+              {/if}
+            </span>
+          </span>
         </div>
+
+        <div class="mx-2 h-4 w-[1px] bg-border"></div>
+
+        {#if isAdvancedMode}
+          <MainMenu />
+        {/if}
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Save Status -->
+        <div
+          class="mr-2 flex min-w-[60px] justify-end text-[10px] font-bold tracking-wider uppercase">
+          {#if $saveStatus === 'saving'}
+            <span class="animate-pulse text-muted-foreground">Saving...</span>
+          {:else if $saveStatus === 'success'}
+            <span
+              class="flex animate-out items-center gap-1 text-green-600 duration-1000 fill-mode-forwards fade-out dark:text-green-400">
+              <CheckIcon class="size-3.5" />
+              Saved
+            </span>
+          {:else if $saveStatus === 'blocked'}
+            <span
+              class="cursor-help text-[9px] text-destructive"
+              title="Click Save button to grant permission">Need Permission</span>
+          {/if}
+        </div>
+
+        <!-- Mode Toggle -->
+        <label
+          class="flex cursor-pointer items-center gap-2 rounded-md border border-border bg-muted/20 px-2 py-1 text-xs font-semibold transition-colors hover:bg-muted/40">
+          <span class="text-muted-foreground {isAdvancedMode ? '' : 'text-foreground'}"
+            >Simple</span>
+          <Toggle
+            pressed={isAdvancedMode}
+            onPressedChange={toggleMode}
+            size="sm"
+            class="h-5 w-8 rounded-full p-0 data-[state=on]:bg-primary">
+            <div
+              class="h-3 w-3 rounded-full bg-white transition-transform {isAdvancedMode
+                ? 'translate-x-1.5'
+                : '-translate-x-1.5'} shadow-sm">
+            </div>
+          </Toggle>
+          <span class="text-muted-foreground {isAdvancedMode ? 'text-foreground' : ''}"
+            >Advanced</span>
+        </label>
+
+        <!-- Actions -->
+        <div
+          class="flex items-center gap-1 rounded-md border border-border bg-muted/20 p-1 shadow-sm">
+          <Button
+            variant="default"
+            size="sm"
+            onclick={handleSaveDiagram}
+            title="Save to File"
+            class="h-7 gap-1.5 px-3 text-xs font-bold">
+            <SaveIcon class="size-3.5" />
+            Save
+          </Button>
+          <div class="mx-1 h-4 w-[1px] bg-border"></div>
+          <Share />
+        </div>
+
+        <Button
+          variant={showAISidebar ? 'secondary' : 'ghost'}
+          size="icon"
+          onclick={() => (showAISidebar = !showAISidebar)}
+          title="AI Assistant"
+          class="size-8 rounded-full text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 dark:text-indigo-400 dark:hover:bg-indigo-950/50">
+          <AIIcon class="size-5" />
+        </Button>
+      </div>
     </header>
 
     <div class="flex flex-1 overflow-hidden">
@@ -277,11 +298,11 @@
                     ? 'History'
                     : activeSideBarView === 'themes'
                       ? 'Theme Store'
-                    : activeSideBarView === 'templates'
-                      ? 'Templates'
-                      : activeSideBarView === 'credits'
-                        ? 'Credits'
-                        : 'Settings'}>
+                      : activeSideBarView === 'templates'
+                        ? 'Templates'
+                        : activeSideBarView === 'credits'
+                          ? 'Credits'
+                          : 'Settings'}>
               {#if activeSideBarView === 'explorer' && !isMobile}
                 <div class="h-full p-2">
                   <FileExplorer {isMobile} />
@@ -290,11 +311,12 @@
                 <ExportPane />
               {:else if activeSideBarView === 'history'}
                 <div class="h-full overflow-y-auto">
-                  <HistoryTimeline onRestore={(code, mermaid) => {
-                    const update: Record<string, string> = { code };
-                    if (mermaid) update.mermaid = mermaid;
-                    updateCodeStore(update);
-                  }} />
+                  <HistoryTimeline
+                    onRestore={(code, mermaid) => {
+                      const update: Record<string, string> = { code };
+                      if (mermaid) update.mermaid = mermaid;
+                      updateCodeStore(update);
+                    }} />
                 </div>
               {:else if activeSideBarView === 'themes'}
                 <ThemeStore />
@@ -309,26 +331,35 @@
               {/if}
             </SideBar>
           </Resizable.Pane>
-          <Resizable.Handle withHandle class="w-1.5 bg-border/50 hover:bg-primary/50 transition-colors" />
+          <Resizable.Handle
+            withHandle
+            class="w-1.5 bg-border/50 transition-colors hover:bg-primary/50" />
         {/if}
 
         <Resizable.Pane order={2} defaultSize={80}>
           <div class="flex h-full flex-col overflow-hidden">
             <!-- Removed old header, now unified at top -->
             <!-- Nested Resizable Group for Editor & Preview -->
-            <Resizable.PaneGroup direction="horizontal" class="flex-1 w-full h-full" autoSaveId="graphi-editor-panes">
-              <Resizable.Pane order={1} defaultSize={50} minSize={20} class="flex flex-col border-r border-border h-full bg-background/50">
+            <Resizable.PaneGroup
+              direction="horizontal"
+              class="h-full w-full flex-1"
+              autoSaveId="graphi-editor-panes">
+              <Resizable.Pane
+                order={1}
+                defaultSize={50}
+                minSize={20}
+                class="flex h-full flex-col border-r border-border bg-background/50">
                 <Card
                   onselect={tabSelectHandler}
                   isOpen
-                  tabs={isAdvancedMode ? editorTabs : [editorTabs[0]]} 
+                  tabs={isAdvancedMode ? editorTabs : [editorTabs[0]]}
                   activeTabID={$stateStore.editorMode}
                   isClosable={false}
-                  class="h-full w-full rounded-none border-0 bg-transparent flex flex-col">
+                  class="flex h-full w-full flex-col rounded-none border-0 bg-transparent">
                   {#snippet actions()}
                     <DiagramDocButton />
                   {/snippet}
-                  <div class="flex-1 overflow-hidden relative">
+                  <div class="relative flex-1 overflow-hidden">
                     {#if $stateStore.editorMode === 'tutorial'}
                       <Tutorial />
                     {:else}
@@ -338,29 +369,41 @@
                 </Card>
               </Resizable.Pane>
 
-              <Resizable.Handle withHandle class="w-1.5 bg-border/50 hover:bg-primary/50 transition-colors" />
+              <Resizable.Handle
+                withHandle
+                class="w-1.5 bg-border/50 transition-colors hover:bg-primary/50" />
 
               <!-- Preview Area styled like mockup -->
-              <Resizable.Pane order={2} defaultSize={50} minSize={20} class="relative h-full flex flex-col items-center justify-center bg-muted/5 theme-transition overflow-hidden">
-                <div class="z-10 w-full h-full p-4 md:p-8 flex items-center justify-center">
-                    <div class="w-full h-full rounded-xl bg-background border border-border transition-all duration-300 relative overflow-hidden flex flex-col">
-                        <View {panZoomState} shouldShowGrid={$stateStore.grid} />
-                    </div>
+              <Resizable.Pane
+                order={2}
+                defaultSize={50}
+                minSize={20}
+                class="theme-transition relative flex h-full flex-col items-center justify-center overflow-hidden bg-muted/5">
+                <div class="z-10 flex h-full w-full items-center justify-center p-4 md:p-8">
+                  <div
+                    class="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-all duration-300">
+                    <View {panZoomState} shouldShowGrid={$stateStore.grid} />
+                  </div>
                 </div>
 
-                <div class="absolute right-6 bottom-6 flex flex-col gap-2 z-20">
+                <div class="absolute right-6 bottom-6 z-20 flex flex-col gap-2">
                   <PanZoomToolbar {panZoomState} />
                 </div>
               </Resizable.Pane>
 
               {#if showAISidebar}
                 <Resizable.Handle withHandle class="w-1.5 bg-border/50" />
-                <Resizable.Pane order={3} defaultSize={30} minSize={20} maxSize={50} class="relative h-full flex flex-col border-l border-border bg-card">
+                <Resizable.Pane
+                  order={3}
+                  defaultSize={30}
+                  minSize={20}
+                  maxSize={50}
+                  class="relative flex h-full flex-col border-l border-border bg-card">
                   <AIChatSidebar
                     currentCode={$stateStore.code}
                     onInsertCode={(code) => updateCodeStore({ code })}
-                    onClose={() => (showAISidebar = false)}
-                  />
+                    onReplaceCode={(code) => updateCodeStore({ code })}
+                    onClose={() => (showAISidebar = false)} />
                 </Resizable.Pane>
               {/if}
             </Resizable.PaneGroup>

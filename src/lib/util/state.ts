@@ -201,7 +201,9 @@ export const loadState = (data: string): void => {
       const keys = Object.keys(state.mermaid)
         .filter((key) => /^\d+$/.test(key))
         .sort((a, b) => Number(a) - Number(b));
-      const burstString = keys.map((key) => (state.mermaid as unknown as Record<string, string>)[key]).join('');
+      const burstString = keys
+        .map((key) => (state.mermaid as unknown as Record<string, string>)[key])
+        .join('');
       if (burstString.trim().startsWith('{')) {
         state.mermaid = burstString;
       }
@@ -224,7 +226,9 @@ export const loadState = (data: string): void => {
           const keys = Object.keys(potentialConfig)
             .filter((key) => /^\d+$/.test(key))
             .sort((a, b) => Number(a) - Number(b));
-          const burstString = keys.map((key) => (potentialConfig as unknown as Record<string, string>)[key]).join('');
+          const burstString = keys
+            .map((key) => (potentialConfig as unknown as Record<string, string>)[key])
+            .join('');
           if (burstString.trim().startsWith('{')) {
             state.mermaid = burstString;
           }

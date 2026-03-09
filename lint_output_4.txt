@@ -1,0 +1,155 @@
+npm warn Unknown project config "auto-install-peers". This will stop working in the next major version of npm.
+
+> mermaid-live-editor@2.0.67 lint
+> prettier --check --cache . && eslint .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\AIChatSidebar.svelte
+   65:12  error  'resetSettings' is defined but never used                                  @typescript-eslint/no-unused-vars
+  130:14  error  'e' is defined but never used                                              @typescript-eslint/no-unused-vars
+  143:8   error  Use an `interface` instead of a `type`                                     @typescript-eslint/consistent-type-definitions
+  197:20  error  Found a mutable instance of the built-in Map class. Use SvelteMap instead  svelte/prefer-svelte-reactivity
+  200:36  error  Forbidden non-null assertion                                               @typescript-eslint/no-non-null-assertion
+  206:14  error  'e' is defined but never used                                              @typescript-eslint/no-unused-vars
+  513:46  error  svelte-ignore comment is used, but not warned                              svelte/no-unused-svelte-ignore
+  514:27  error  `{@html}` can lead to XSS attack                                           svelte/no-at-html-tags
+  642:34  error  svelte-ignore comment is used, but not warned                              svelte/no-unused-svelte-ignore
+  643:15  error  `{@html}` can lead to XSS attack                                           svelte/no-at-html-tags
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\FileExplorer\FileExplorer.svelte
+   11:5   error  'saveStatus' is defined but never used        @typescript-eslint/no-unused-vars
+   59:10  error  'SaveIcon' is defined but never used          @typescript-eslint/no-unused-vars
+   62:12  error  'exportToZip' is defined but never used       @typescript-eslint/no-unused-vars
+  124:36  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  147:36  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  209:31  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  220:18  error  'handleManualSave' is defined but never used  @typescript-eslint/no-unused-vars
+  383:29  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\IconPicker\IconPicker.svelte
+   14:23  error  Array type using 'Array<T>' is forbidden. Use 'T[]' instead  @typescript-eslint/array-type
+  101:13  error  Each block should have a key                                 svelte/require-each-key
+  130:21  error  `{@html}` can lead to XSS attack                             svelte/no-at-html-tags
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\InteractiveView.svelte
+   42:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   43:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  337:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  354:21  error  Each block should have a key              svelte/require-each-key
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\ActivityBar.svelte
+  2:12  error  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\ExportPane.svelte
+    7:12  error  'TID' is defined but never used           @typescript-eslint/no-unused-vars
+   26:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   27:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   34:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   36:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   42:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   46:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   51:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   52:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   89:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  152:75  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  159:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  162:84  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  165:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  198:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  198:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  272:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  272:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\ExportSelectionDialog.svelte
+  20:28  error  SvelteSet is already reactive, $state wrapping is unnecessary  svelte/no-unnecessary-state-wrap
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\ShortcutsModal.svelte
+  29:9  error  Each block should have a key  svelte/require-each-key
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\StatusBar.svelte
+  8:12  error  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\TemplatePane.svelte
+    2:12  error  'Button' is defined but never used                                                     @typescript-eslint/no-unused-vars
+    4:12  error  'getSampleDiagrams' is defined but never used                                          @typescript-eslint/no-unused-vars
+    5:12  error  'updateCode' is defined but never used                                                 @typescript-eslint/no-unused-vars
+  213:37  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+  227:7   error  Expected object keys to be in ascending order. 'pan' should be before 'updateDiagram'  sort-keys/sort-keys-fix
+  241:5   error  Each block should have a key                                                           svelte/require-each-key
+  247:11  error  Each block should have a key                                                           svelte/require-each-key
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Layout\Tutorial.svelte
+    4:10  error  'CategoryIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  115:11  error  Each block should have a key              svelte/require-each-key
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Privacy.svelte
+  2:10  error  'ExternalLinkWrapper' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\Share.svelte
+  3:12  error  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\berol\Projekte\Mermaid\src\lib\components\ThemeStore.svelte
+  60:9  error  Expected object keys to be in ascending order. 'primaryColor' should be before 'theme'                   sort-keys/sort-keys-fix
+  62:9  error  Expected object keys to be in ascending order. 'primaryBorderColor' should be before 'primaryTextColor'  sort-keys/sort-keys-fix
+  63:9  error  Expected object keys to be in ascending order. 'lineColor' should be before 'primaryBorderColor'         sort-keys/sort-keys-fix
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\exportPlugins.ts
+  35:75  error  Unnecessary escape character: \/  no-useless-escape
+  58:72  error  Unnecessary escape character: \/  no-useless-escape
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\historyStore.ts
+  62:5  error  Expected object keys to be in ascending order. 'code' should be before 'timestamp'  sort-keys/sort-keys-fix
+  64:5  error  Expected object keys to be in ascending order. 'label' should be before 'mermaid'   sort-keys/sort-keys-fix
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\hybrid_burst.test.ts
+  20:21  error  Unexpected empty method 'setValue'        @typescript-eslint/no-empty-function
+  21:24  error  Unexpected empty method 'deleteValue'     @typescript-eslint/no-empty-function
+  23:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\mermaid.ts
+  20:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\state.test.ts
+  21:21  error  Unexpected empty method 'setValue'        @typescript-eslint/no-empty-function
+  22:24  error  Unexpected empty method 'deleteValue'     @typescript-eslint/no-empty-function
+  24:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  69:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  81:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  90:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  96:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\berol\Projekte\Mermaid\src\lib\util\state.ts
+   34:3  error  Expected object keys to be in ascending order. 'isAdvancedMode' should be before 'viewMode'          sort-keys/sort-keys-fix
+   35:3  error  Expected object keys to be in ascending order. 'exportBackground' should be before 'isAdvancedMode'  sort-keys/sort-keys-fix
+   62:5  error  Expected object keys to be in ascending order. 'isAdvancedMode' should be before 'viewMode'          sort-keys/sort-keys-fix
+   63:5  error  Expected object keys to be in ascending order. 'exportBackground' should be before 'isAdvancedMode'  sort-keys/sort-keys-fix
+   78:5  error  Expected object keys to be in ascending order. 'isAdvancedMode' should be before 'viewMode'          sort-keys/sort-keys-fix
+   79:5  error  Expected object keys to be in ascending order. 'exportBackground' should be before 'isAdvancedMode'  sort-keys/sort-keys-fix
+  327:5  error  Definition for rule 'svelte/no-navigation-without-resolve' was not found                             svelte/no-navigation-without-resolve
+
+✖ 104 problems (104 errors, 0 warnings)
+  8 errors and 0 warnings potentially fixable with the `--fix` option.
+

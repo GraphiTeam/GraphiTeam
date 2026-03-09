@@ -260,13 +260,13 @@ ${svgString}`);
         bind:value={imageSize} />
     </div>
     <div class="flex items-center gap-2 px-2 py-1">
-      <input 
+      <input
         id="transparent-bg"
-        type="checkbox" 
-        bind:checked={isTransparent} 
-        class="size-4 rounded border-gray-300 text-primary focus:ring-primary"
-      />
-      <label for="transparent-bg" class="text-sm cursor-pointer whitespace-nowrap">Transparent background</label>
+        type="checkbox"
+        bind:checked={isTransparent}
+        class="size-4 rounded border-gray-300 text-primary focus:ring-primary" />
+      <label for="transparent-bg" class="cursor-pointer text-sm whitespace-nowrap"
+        >Transparent background</label>
     </div>
     <div class="flex gap-2">
       {@render dualActionButton('PNG', onDownloadPNG, $urlsStore.png)}

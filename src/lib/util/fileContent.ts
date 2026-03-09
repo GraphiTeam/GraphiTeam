@@ -8,20 +8,20 @@ const CONFIG_PATTERN = /\n?%%config:(.*?)%%\s*$/s;
  * Appends %%config:{...}%% at the end if config is provided.
  */
 export function packFileContent(code: string, config: string): string {
-    // Strip any existing config block from code first
-    const cleanCode = code.replace(CONFIG_PATTERN, '').trimEnd();
+  // Strip any existing config block from code first
+  const cleanCode = code.replace(CONFIG_PATTERN, '').trimEnd();
 
-    if (!config || config === '{}') {
-        return cleanCode;
-    }
+  if (!config || config === '{}') {
+    return cleanCode;
+  }
 
-    // Compact the JSON to a single line for the config block
-    try {
-        const compactConfig = JSON.stringify(JSON.parse(config));
-        return `${cleanCode}\n%%config:${compactConfig}%%`;
-    } catch {
-        return cleanCode;
-    }
+  // Compact the JSON to a single line for the config block
+  try {
+    const compactConfig = JSON.stringify(JSON.parse(config));
+    return `${cleanCode}\n%%config:${compactConfig}%%`;
+  } catch {
+    return cleanCode;
+  }
 }
 
 /**
@@ -29,19 +29,19 @@ export function packFileContent(code: string, config: string): string {
  * If no config block is found, returns just the code.
  */
 export function unpackFileContent(content: string): { code: string; config?: string } {
-    const match = content.match(CONFIG_PATTERN);
+  const match = content.match(CONFIG_PATTERN);
 
-    if (!match) {
-        return { code: content };
-    }
+  if (!match) {
+    return { code: content };
+  }
 
-    const code = content.replace(CONFIG_PATTERN, '').trimEnd();
-    try {
-        // Validate the config is valid JSON
-        const parsed = JSON.parse(match[1]);
-        const config = JSON.stringify(parsed, null, 2);
-        return { code, config };
-    } catch {
-        return { code };
-    }
+  const code = content.replace(CONFIG_PATTERN, '').trimEnd();
+  try {
+    // Validate the config is valid JSON
+    const parsed = JSON.parse(match[1]);
+    const config = JSON.stringify(parsed, null, 2);
+    return { code, config };
+  } catch {
+    return { code };
+  }
 }

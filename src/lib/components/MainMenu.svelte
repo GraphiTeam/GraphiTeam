@@ -51,11 +51,11 @@
     href={options.href}
     target="_blank"
     class={cn(
-      'flex items-center justify-start gap-2 border-b border-border p-2 px-3 text-sm hover:bg-muted text-foreground transition-colors',
+      'flex items-center justify-start gap-2 border-b border-border p-2 px-3 text-sm text-foreground transition-colors hover:bg-muted',
       options.isSectionEnd && 'border-b-2',
       options.class
     )}>
-    <options.icon class="size-4 text-muted-foreground mr-1" />
+    <options.icon class="mr-1 size-4 text-muted-foreground" />
     {options.label}
   </a>
 {/snippet}
@@ -73,12 +73,12 @@
 {#snippet darkModeMenuItem(options: MenuItem)}
   <div
     class={cn(
-      'flex cursor-pointer items-center justify-between border-b border-border px-3 py-2.5 hover:bg-muted transition-colors text-sm text-foreground',
+      'flex cursor-pointer items-center justify-between border-b border-border px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-muted',
       options.isSectionEnd && 'border-b-0',
       options.class
     )}>
     <span class="flex items-center gap-2">
-      <ContrastIcon class="size-4 text-muted-foreground mr-1" />
+      <ContrastIcon class="mr-1 size-4 text-muted-foreground" />
       Dark Mode
     </span>
     <Switch
@@ -88,13 +88,17 @@
 {/snippet}
 
 <Popover.Root>
-  <Popover.Trigger class="shrink-0 rounded-md p-1 hover:bg-muted transition-colors focus:ring-2 focus:ring-primary outline-none">
+  <Popover.Trigger
+    class="shrink-0 rounded-md p-1 transition-colors outline-none hover:bg-muted focus:ring-2 focus:ring-primary">
     <img
       src="https://raw.githubusercontent.com/mermert1/Assets/refs/heads/main/graphilogo.png"
       alt="Menu"
       class="size-6 object-contain" />
   </Popover.Trigger>
-  <Popover.Content align="start" class="flex flex-col w-56 overflow-hidden border border-border bg-background shadow-lg rounded-xl p-0" sideOffset={8}>
+  <Popover.Content
+    align="start"
+    class="flex w-56 flex-col overflow-hidden rounded-xl border border-border bg-background p-0 shadow-lg"
+    sideOffset={8}>
     {#each menuItems as { renderer, ...item } (item.label)}
       {@render renderer(item)}
     {/each}

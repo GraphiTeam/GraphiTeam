@@ -67,17 +67,15 @@
   {:else}
     <div class="timeline-list">
       {#each entries as entry (entry.id)}
-        <div
-          class="timeline-entry"
-          class:timeline-entry-selected={$selectedEntryId === entry.id}
-        >
+        <div class="timeline-entry" class:timeline-entry-selected={$selectedEntryId === entry.id}>
           <div class="timeline-dot"></div>
           <div class="timeline-content">
             <div class="timeline-meta">
               <span class="timeline-label">{entry.label}</span>
               <span class="timeline-time">{formatTime(entry.timestamp)}</span>
             </div>
-            <pre class="timeline-preview"><code>{entry.code.slice(0, 120)}{entry.code.length > 120 ? '...' : ''}</code></pre>
+            <pre class="timeline-preview"><code
+                >{entry.code.slice(0, 120)}{entry.code.length > 120 ? '...' : ''}</code></pre>
             <div class="timeline-actions">
               <Button size="sm" variant="outline" onclick={() => handleRestore(entry)}>
                 Restore
@@ -86,8 +84,7 @@
                 size="sm"
                 variant="ghost"
                 onclick={() => handleDelete(entry.id)}
-                class="text-destructive"
-              >
+                class="text-destructive">
                 ✕
               </Button>
             </div>

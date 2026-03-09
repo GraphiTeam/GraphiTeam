@@ -19,6 +19,7 @@ Because Graphi is hosted on GitHub Pages (which only serves static files), we ne
 
 3. **Set Secrets**:
    Run the following commands and paste the Client ID and Secret from your new GitHub OAuth app:
+
    ```bash
    npx wrangler secret put GITHUB_CLIENT_ID
    npx wrangler secret put GITHUB_CLIENT_SECRET
