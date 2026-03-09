@@ -3,48 +3,51 @@
   import * as Popover from '$/components/ui/popover';
   import Icon from '~icons/material-symbols/add-reaction';
   import SearchIcon from '~icons/material-symbols/search';
-  import { toast } from 'svelte-sonner';
+  import { azureIconsMap } from '$/util/mermaid';
 
-  // FontAwesome 6 Free icons commonly used in Mermaid
-  // ... (keep icon list same) ...
-  const icons = [
-    { id: 'fa:fa-user', name: 'User' },
-    { id: 'fa:fa-car', name: 'Car' },
-    { id: 'fa:fa-database', name: 'Database' },
-    { id: 'fa:fa-server', name: 'Server' },
-    { id: 'fa:fa-cloud', name: 'Cloud' },
-    { id: 'fa:fa-envelope', name: 'Envelope' },
-    { id: 'fa:fa-check', name: 'Check' },
-    { id: 'fa:fa-times', name: 'Times' },
-    { id: 'fa:fa-cog', name: 'Cog' },
-    { id: 'fa:fa-home', name: 'Home' },
-    { id: 'fa:fa-camera', name: 'Camera' },
-    { id: 'fa:fa-heart', name: 'Heart' },
-    { id: 'fa:fa-rocket', name: 'Rocket' },
-    { id: 'fa:fa-laptop', name: 'Laptop' },
-    { id: 'fa:fa-mobile', name: 'Mobile' },
-    { id: 'fa:fa-wifi', name: 'Wifi' },
-    { id: 'fa:fa-lock', name: 'Lock' },
-    { id: 'fa:fa-thumbs-up', name: 'Thumbs Up' }
-  ];
+  const { onInsert } = $props<{ onInsert: (iconId: string) => void }>();
 
   let searchQuery = $state('');
-  let filteredIcons = $derived(
-    icons.filter(
-      (icon) =>
-        icon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        icon.id.includes(searchQuery.toLowerCase())
-    )
-  );
   let isOpen = $state(false);
+  let activeTab = $state<'iconify' | 'azure'>('iconify');
 
-  function insertIcon(iconId: string) {
-    navigator.clipboard.writeText(iconId).then(() => {
-      toast.success('Icon copied successfully', {
-        style: 'background: #22c55e; color: white; border: none; font-weight: 500;'
-      });
-      isOpen = false;
-    });
+  let iconifyResults: Array<{ prefix: string; name: string }> = $state([]);
+  let isSearchingIconify = $state(false);
+
+  let azureIcons = $derived(Array.from(azureIconsMap.keys()));
+  let filteredAzureIcons = $derived(
+    azureIcons.filter((icon) => icon.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  let searchTimeout: NodeJS.Timeout;
+
+  $effect(() => {
+    if (activeTab === 'iconify' && searchQuery.length >= 2) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(async () => {
+        isSearchingIconify = true;
+        try {
+          const res = await fetch(`https://api.iconify.design/search?query=${searchQuery}&limit=60`);
+          const data = await res.json();
+          iconifyResults = data.icons.map((id: string) => {
+            const [prefix, name] = id.split(':');
+            return { prefix, name };
+          });
+        } catch (e) {
+          console.error('Failed to search iconify:', e);
+          iconifyResults = [];
+        } finally {
+          isSearchingIconify = false;
+        }
+      }, 300);
+    } else if (activeTab === 'iconify') {
+      iconifyResults = [];
+    }
+  });
+
+  function handleInsert(iconId: string) {
+    onInsert(iconId);
+    isOpen = false;
   }
 </script>
 
@@ -54,9 +57,22 @@
       <Icon class="size-5" />
     </Button>
   </Popover.Trigger>
-  <Popover.Content class="w-64 p-2">
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center gap-2 rounded-md border px-2 py-1">
+  <Popover.Content class="w-80 p-3 shadow-lg">
+    <div class="w-full flex flex-col">
+      <div class="flex items-center rounded-md bg-muted p-1 text-muted-foreground w-full">
+        <button 
+            class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 {activeTab === 'iconify' ? 'bg-background text-foreground shadow-sm' : 'hover:bg-background/50 hover:text-foreground'}" 
+            onclick={() => activeTab = 'iconify'}>
+            Iconify
+        </button>
+        <button 
+            class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 {activeTab === 'azure' ? 'bg-background text-foreground shadow-sm' : 'hover:bg-background/50 hover:text-foreground'}" 
+            onclick={() => activeTab = 'azure'}>
+            Azure
+        </button>
+      </div>
+      
+      <div class="mt-3 flex items-center gap-2 rounded-md border px-2 py-1 bg-background">
         <SearchIcon class="text-muted-foreground" />
         <input
           type="text"
@@ -64,19 +80,49 @@
           class="w-full bg-transparent text-sm focus:outline-none"
           bind:value={searchQuery} />
       </div>
-      <div class="grid max-h-48 grid-cols-4 gap-2 overflow-y-auto pt-2">
-        {#each filteredIcons as icon (icon.id)}
-          <button
-            class="flex flex-col items-center justify-center gap-1 rounded bg-muted p-1 hover:bg-accent hover:text-accent-foreground"
-            onclick={() => insertIcon(icon.id)}
-            title={icon.name}>
-            <i class={`fa ${icon.id.replace('fa:fa-', 'fa-')} text-lg`}></i>
-            <!-- Note: font-awesome needs to be loaded globally for 'i' tag preivew, 
-                         or we just show a placeholder/name if not available yet -->
-            <span class="w-full truncate text-center text-[10px]">{icon.name}</span>
-          </button>
-        {/each}
-      </div>
+
+      {#if activeTab === 'iconify'}
+        <div class="mt-2 grid h-64 grid-cols-5 gap-2 overflow-y-auto p-1">
+          {#if isSearchingIconify}
+            <div class="col-span-5 text-center text-sm text-muted-foreground p-4">Loading...</div>
+          {:else if iconifyResults.length === 0}
+            <div class="col-span-5 text-center text-sm text-muted-foreground p-4">
+              {searchQuery.length < 2 ? 'Type to search 200,000+ icons' : 'No results found'}
+            </div>
+          {:else}
+            {#each iconifyResults as icon}
+              <button
+                class="flex aspect-square items-center justify-center rounded bg-muted/50 p-2 hover:bg-accent hover:text-accent-foreground transition-colors border border-transparent hover:border-border"
+                onclick={() => handleInsert(`${icon.prefix}:${icon.name}`)}
+                title={`${icon.prefix}:${icon.name}`}>
+                <img src={`https://api.iconify.design/${icon.prefix}/${icon.name}.svg`} alt={icon.name} class="w-6 h-6 dark:invert" />
+              </button>
+            {/each}
+          {/if}
+        </div>
+      {:else if activeTab === 'azure'}
+        <div class="mt-2 grid h-64 grid-cols-4 gap-2 overflow-y-auto p-1">
+          {#if filteredAzureIcons.length === 0}
+            <div class="col-span-4 text-center text-sm text-muted-foreground p-4">No Azure icons found</div>
+          {:else}
+            {#each filteredAzureIcons as icon (icon)}
+              {@const svgData = azureIconsMap.get(icon)}
+              <button
+                class="flex flex-col aspect-square items-center justify-center gap-1 rounded bg-muted/50 p-1 hover:bg-accent hover:text-accent-foreground transition-colors border border-transparent hover:border-border"
+                onclick={() => handleInsert(icon)}
+                title={icon}>
+                {#if svgData}
+                  <!-- Use the base64 SVG preview or raw rendering (raw is smaller) -->
+                  <svg viewBox={`0 0 ${svgData.width} ${svgData.height}`} class="w-6 h-6">
+                    {@html svgData.body}
+                  </svg>
+                {/if}
+                <span class="w-full truncate text-center text-[9px] mt-1">{icon.replace('azure:', '')}</span>
+              </button>
+            {/each}
+          {/if}
+        </div>
+      {/if}
     </div>
   </Popover.Content>
 </Popover.Root>

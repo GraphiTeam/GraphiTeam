@@ -10,6 +10,7 @@
   import monacoJsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
   import { debounce } from 'lodash-es';
   import { onMount } from 'svelte';
+  import IconPicker from '$/components/IconPicker/IconPicker.svelte';
 
   const { onUpdate }: EditorProps = $props();
 
@@ -133,6 +134,31 @@
       editor?.dispose();
     };
   });
+
+  function handleInsertIcon(iconId: string) {
+    if (!editor) return;
+    const selection = editor.getSelection();
+    if (!selection) return;
+
+    editor.executeEdits('icon-picker', [
+      {
+        range: selection,
+        text: iconId,
+        forceMoveMarkers: true
+      }
+    ]);
+    editor.focus();
+  }
 </script>
 
-<div bind:this={divElement} id="editor" class="h-full flex-grow overflow-hidden"></div>
+<div class="relative h-full w-full">
+  <!-- The Monaco Editor container -->
+  <div bind:this={divElement} id="editor" class="h-full w-full"></div>
+
+  <!-- Floating UI over the editor -->
+  <div class="absolute right-4 top-4 z-10 flex gap-2">
+    <div class="rounded-md border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <IconPicker onInsert={handleInsertIcon} />
+    </div>
+  </div>
+</div>

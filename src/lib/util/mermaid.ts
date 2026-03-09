@@ -8,12 +8,71 @@ import mermaid from 'mermaid';
 mermaid.registerLayoutLoaders([...elkLayouts, ...tidyTreeLayouts]);
 const init = mermaid.registerExternalDiagrams([zenuml]);
 
+export const azureIconsMap = new Map<string, { body: string; width: number; height: number }>();
+
+const registerIconsPromise = (async () => {
+  try {
+    const azureIconsSvg = import.meta.glob('/static/icons/Azure_Icons/Icons/**/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+    const azureIconsData: Record<string, any> = {};
+
+    for (const [path, svgContent] of Object.entries(azureIconsSvg)) {
+      const filename = path.split('/').pop()?.replace('.svg', '') || '';
+      let iconName = filename.replace(/^\d+-icon-service-/, '').replace(/^\d+-icon-/, '');
+      iconName = iconName.toLowerCase();
+
+      const bodyMatch = svgContent.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+      if (!bodyMatch) continue;
+      
+      let width = 18, height = 18;
+      const viewBoxMatch = svgContent.match(/viewBox="([^"]+)"/i);
+      if (viewBoxMatch) {
+        const parts = viewBoxMatch[1].split(/[ ,]+/);
+        if (parts.length >= 4) {
+          width = parseFloat(parts[2]);
+          height = parseFloat(parts[3]);
+        }
+      } else {
+        const widthMatch = svgContent.match(/width="([^"]+)"/i);
+        const heightMatch = svgContent.match(/height="([^"]+)"/i);
+        if (widthMatch) width = parseFloat(widthMatch[1]);
+        if (heightMatch) height = parseFloat(heightMatch[1]);
+      }
+
+      azureIconsData[iconName] = { body: bodyMatch[1], width, height };
+      azureIconsMap.set(`azure:${iconName}`, { body: bodyMatch[1], width, height });
+    }
+
+    mermaid.registerIconPacks([
+      {
+        name: 'azure',
+        icons: {
+          prefix: 'azure',
+          icons: azureIconsData
+        }
+      }
+    ]);
+
+    const collectionsRes = await fetch('https://raw.githubusercontent.com/iconify/icon-sets/master/collections.json');
+    const collections = await collectionsRes.json();
+    
+    const packs = Object.keys(collections).map((prefix) => ({
+      name: prefix,
+      loader: () => fetch(`https://unpkg.com/@iconify-json/${prefix}@1/icons.json`).then((res) => res.json())
+    }));
+    
+    mermaid.registerIconPacks(packs);
+  } catch (e) {
+    console.error('Failed to register icons:', e);
+  }
+})();
+
 export const render = async (
   config: MermaidConfig,
   code: string,
   id: string
 ): Promise<RenderResult> => {
   await init;
+  await registerIconsPromise;
 
   // Should be able to call this multiple times without any issues.
   mermaid.initialize(config);
