@@ -11,7 +11,7 @@
   import { getDomain } from '$/util/util';
   import { browser } from '$app/environment';
   import { waitForRender } from '$lib/util/autoSync';
-  import { activeVirtualFileId } from '$/util/fileSystem';
+  import { activeFileHandle, activeVirtualFileId } from '$/util/fileSystem';
   import { inputStateStore, stateStore, urlsStore } from '$lib/util/state';
   import { logEvent } from '$lib/util/stats';
   import { version as FAVersion } from '@fortawesome/fontawesome-free/package.json';
@@ -140,7 +140,14 @@ ${svgString}`);
   };
 
   const getFileName = async (extension: string) => {
-    const virtualId = get(activeVirtualFileId);
+    // 1. Check local file system handles
+    if ($activeFileHandle && $activeFileHandle.name) {
+      const baseName = $activeFileHandle.name.replace(/\.[^/.]+$/, '');
+      return `${baseName}.${extension}`;
+    }
+
+    // 2. Check workspace handles
+    const virtualId = $activeVirtualFileId;
     if (virtualId) {
       const { siteFiles } = await import('$/util/siteWorkspace.svelte');
       const file = siteFiles.find((f) => f.id === virtualId);
@@ -149,6 +156,8 @@ ${svgString}`);
         return `${baseName}.${extension}`;
       }
     }
+
+    // 3. Fallback
     return `mermaid-diagram-${dayjs().format('YYYY-MM-DD-HHmmss')}.${extension}`;
   };
 
