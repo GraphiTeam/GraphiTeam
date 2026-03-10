@@ -129,29 +129,45 @@ export class PanZoomState {
       console.error('PanZoomState.restorePanZoom: pzoom is not initialized');
       return;
     }
-    this.pzoom.zoom(zoom);
-    this.pzoom.pan(pan);
+    try {
+      this.pzoom.zoom(zoom);
+      this.pzoom.pan(pan);
+    } catch (e) {
+      // SVGMatrix might not be invertible if SVG is hidden or 0x0
+    }
   }
 
   public resize() {
-    this.pzoom?.resize();
-    if (!this.isDirty) {
-      this.reset();
+    try {
+      this.pzoom?.resize();
+      if (!this.isDirty) {
+        this.reset();
+      }
+    } catch (e) {
+      // Ignore during unmounted/hidden states
     }
   }
 
   public zoomIn() {
-    this.pzoom?.zoomIn();
+    try {
+      this.pzoom?.zoomIn();
+    } catch (e) {}
   }
 
   public zoomOut() {
-    this.pzoom?.zoomOut();
+    try {
+      this.pzoom?.zoomOut();
+    } catch (e) {}
   }
 
   public reset() {
-    this.pzoom?.reset();
-    // Zoom out a bit to avoid overlap with the toolbar
-    this.pzoom?.zoom(0.875);
-    this.isDirty = false;
+    try {
+      this.pzoom?.reset();
+      // Zoom out a bit to avoid overlap with the toolbar
+      this.pzoom?.zoom(0.875);
+      this.isDirty = false;
+    } catch (e) {
+      // Ignore InvalidStateError SVGMatrix
+    }
   }
 }

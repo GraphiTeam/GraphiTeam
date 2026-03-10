@@ -12,6 +12,7 @@
   import { browser } from '$app/environment';
   import { waitForRender } from '$lib/util/autoSync';
   import { activeFileHandle, activeVirtualFileId } from '$/util/fileSystem';
+  import { siteFiles } from '$/util/siteWorkspace.svelte';
   import { inputStateStore, stateStore, urlsStore } from '$lib/util/state';
   import { logEvent } from '$lib/util/stats';
   import { version as FAVersion } from '@fortawesome/fontawesome-free/package.json';
@@ -139,7 +140,7 @@ ${svgString}`);
     event.preventDefault();
   };
 
-  const getFileName = async (extension: string) => {
+  const getFileName = (extension: string) => {
     // 1. Check local file system handles
     if ($activeFileHandle && $activeFileHandle.name) {
       const baseName = $activeFileHandle.name.replace(/\.[^/.]+$/, '');
@@ -149,7 +150,6 @@ ${svgString}`);
     // 2. Check workspace handles
     const virtualId = $activeVirtualFileId;
     if (virtualId) {
-      const { siteFiles } = await import('$/util/siteWorkspace.svelte');
       const file = siteFiles.find((f) => f.id === virtualId);
       if (file && file.name) {
         const baseName = file.name.replace(/\.[^/.]+$/, '');
@@ -170,12 +170,11 @@ ${svgString}`);
   };
 
   const downloadImage: Exporter = (context, image) => {
-    return async () => {
+    return () => {
       const { canvas } = context;
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      const filename = await getFileName('png');
       simulateDownload(
-        filename,
+        getFileName('png'),
         canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
       );
     };
@@ -218,9 +217,8 @@ ${svgString}`);
     });
   };
 
-  const onDownloadSVG = async () => {
-    const filename = await getFileName('svg');
-    simulateDownload(filename, `data:image/svg+xml;base64,${getBase64SVG()}`);
+  const onDownloadSVG = () => {
+    simulateDownload(getFileName('svg'), `data:image/svg+xml;base64,${getBase64SVG()}`);
     logEvent('download', {
       type: 'svg'
     });
@@ -355,13 +353,12 @@ ${svgString}`);
         }}>
         Jira
       </Button>
-        <Button
+      <Button
         size="sm"
         variant="outline"
         class="flex-1 text-xs"
-        onclick={async () => {
-          const filename = await getFileName('html');
-          downloadAsFile(exportToHtml($stateStore.code), filename, 'text/html');
+        onclick={() => {
+          downloadAsFile(exportToHtml($stateStore.code), getFileName('html'), 'text/html');
           toast.success('HTML file downloaded!');
         }}>
         HTML
