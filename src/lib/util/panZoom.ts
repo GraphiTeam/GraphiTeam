@@ -25,9 +25,14 @@ export class PanZoomState {
   }
 
   public updateElement(diagramView: SVGElement, { pan, zoom }: Pick<State, 'pan' | 'zoom'>) {
-    this.pzoom?.destroy();
+    try {
+      this.pzoom?.destroy();
+    } catch (e) {
+      // Ignore destroy matrix error
+    }
     let hammer: HammerManager | undefined;
-    this.pzoom = panzoom(diagramView, {
+    try {
+      this.pzoom = panzoom(diagramView, {
       center: true,
       controlIconsEnabled: false,
       customEventsHandler: {
@@ -97,6 +102,10 @@ export class PanZoomState {
       panEnabled: true,
       zoomEnabled: true
     });
+    } catch (e) {
+      // panzoom startup failure
+      return;
+    }
 
     this.pzoom.disableDblClickZoom();
 

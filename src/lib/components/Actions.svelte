@@ -9,7 +9,7 @@
   import * as ToggleGroup from '$/components/ui/toggle-group';
   import { TID } from '$/constants';
   import { getDomain } from '$/util/util';
-  import { browser } from '$app/environment';
+  import { get } from 'svelte/store';
   import { waitForRender } from '$lib/util/autoSync';
   import { activeFileHandle, activeVirtualFileId } from '$/util/fileSystem';
   import { siteFiles } from '$/util/siteWorkspace.svelte';
@@ -142,13 +142,14 @@ ${svgString}`);
 
   const getFileName = (extension: string) => {
     // 1. Check local file system handles
-    if ($activeFileHandle && $activeFileHandle.name) {
-      const baseName = $activeFileHandle.name.replace(/\.[^/.]+$/, '');
+    const pHandle = get(activeFileHandle);
+    if (pHandle && pHandle.name) {
+      const baseName = pHandle.name.replace(/\.[^/.]+$/, '');
       return `${baseName}.${extension}`;
     }
 
     // 2. Check workspace handles
-    const virtualId = $activeVirtualFileId;
+    const virtualId = get(activeVirtualFileId);
     if (virtualId) {
       const file = siteFiles.find((f) => f.id === virtualId);
       if (file && file.name) {
