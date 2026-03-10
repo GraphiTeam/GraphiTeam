@@ -4,9 +4,10 @@
   import { Input } from '../ui/input';
   import { Separator } from '../ui/separator';
   import * as ToggleGroup from '../ui/toggle-group';
-  import { TID } from '../../constants';
   import { waitForRender } from '../../util/autoSync';
   import { inputStateStore, stateStore } from '../../util/state';
+  import { activeFileHandle, activeVirtualFileId } from '../../util/fileSystem';
+  import { siteFiles } from '../../util/siteWorkspace.svelte';
   import { logEvent } from '../../util/stats';
   import dayjs from 'dayjs';
   import { toBase64 } from 'js-base64';
@@ -23,35 +24,34 @@
   let exportBackground = $state('#ffffff');
 
   $effect(() => {
-    if (typeof window !== 'undefined' && (stateStore as any).exportBackground) {
-      exportBackground = (stateStore as any).exportBackground;
+    const state = stateStore as unknown as { exportBackground?: string };
+    if (typeof window !== 'undefined' && state.exportBackground) {
+      exportBackground = state.exportBackground;
     }
   });
 
   $effect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      (stateStore as any).exportBackground !== exportBackground
-    ) {
-      inputStateStore.update((s: any) => ({ ...s, exportBackground }));
+    const state = stateStore as unknown as { exportBackground?: string };
+    if (typeof window !== 'undefined' && state.exportBackground !== exportBackground) {
+      inputStateStore.update((s: Record<string, unknown>) => ({ ...s, exportBackground }));
     }
   });
 
   let imageSize = $state(1080);
 
-  const getSvgElement = (): any => {
+  const getSvgElement = (): SVGSVGElement | null => {
     if (typeof document === 'undefined') return null;
     const svgElement = document.querySelector('#container svg')?.cloneNode(true);
     if (!svgElement) return null;
-    const element = svgElement as any;
+    const element = svgElement as SVGSVGElement;
     element.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
     return element;
   };
 
-  const getBase64SVG = (svg?: any, width?: number, height?: number): string => {
-    let svgToUse: any = svg;
+  const getBase64SVG = (svg?: SVGSVGElement, width?: number, height?: number): string => {
+    let svgToUse: SVGSVGElement | null = svg ?? null;
     if (svgToUse) {
-      svgToUse = svgToUse.cloneNode(true);
+      svgToUse = svgToUse.cloneNode(true) as SVGSVGElement;
     } else {
       svgToUse = getSvgElement();
     }
@@ -80,13 +80,20 @@
 ${svgString}`);
   };
 
-  const exportImage = async (event: Event, exporter: any) => {
+  const exportImage = async (
+    event: Event,
+    exporter: (context: CanvasRenderingContext2D, image: HTMLImageElement) => () => void
+  ) => {
     if (typeof window === 'undefined') return;
-    (inputStateStore as any).update((s: any) => ({ ...s, panZoom: false }));
+    (
+      inputStateStore as unknown as {
+        update: (fn: (s: Record<string, unknown>) => Record<string, unknown>) => void;
+      }
+    ).update((s) => ({ ...s, panZoom: false }));
     await new Promise((resolve) => setTimeout(resolve, 1000));
     await waitForRender();
     const canvas = document.createElement('canvas');
-    const svg = document.querySelector<any>('#container svg');
+    const svg = document.querySelector<SVGSVGElement>('#container svg');
     if (!svg) return;
 
     const box = svg.getBoundingClientRect();
@@ -118,15 +125,28 @@ ${svgString}`);
     const image = new Image();
     image.addEventListener('load', () => {
       exporter(context, image)();
-      (inputStateStore as any).update((s: any) => ({ ...s, panZoom: true }));
+      (
+        inputStateStore as unknown as {
+          update: (fn: (s: Record<string, unknown>) => Record<string, unknown>) => void;
+        }
+      ).update((s) => ({ ...s, panZoom: true }));
     });
     image.src = `data:image/svg+xml;base64,${getBase64SVG(svg, canvas.width, canvas.height)}`;
     event.stopPropagation();
     event.preventDefault();
   };
 
-  const getFileName = (extension: string) =>
-    `mermaid-diagram-${dayjs().format('YYYY-MM-DD-HHmmss')}.${extension}`;
+  const getFileName = (extension: string) => {
+    let name = '';
+    if ($activeFileHandle) {
+      name = $activeFileHandle.name.replace(/\.(mmd|mermaid|txt|json|dia|md)$/i, '');
+    } else if ($activeVirtualFileId) {
+      const file = siteFiles.find((f) => f.id === $activeVirtualFileId);
+      if (file) name = file.name.replace(/\.(mmd|mermaid|txt|json|dia|md)$/i, '');
+    }
+    const baseName = name ? name : `mermaid-diagram-${dayjs().format('YYYY-MM-DD-HHmmss')}`;
+    return `${baseName}.${extension}`;
+  };
 
   const simulateDownload = (download: string, href: string): void => {
     if (typeof document === 'undefined') return;
@@ -137,7 +157,7 @@ ${svgString}`);
     a.remove();
   };
 
-  const downloadImage: any = (context: any, image: any) => {
+  const downloadImage = (context: CanvasRenderingContext2D, image: HTMLImageElement) => {
     return () => {
       const canvas = context.canvas;
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -149,20 +169,27 @@ ${svgString}`);
   };
 
   const isClipboardAvailable = (): boolean => {
-    return typeof window !== 'undefined' && 'ClipboardItem' in (window as any);
+    return typeof window !== 'undefined' && 'ClipboardItem' in window;
   };
 
-  const clipboardCopy: any = (context: any, image: any) => {
+  const clipboardCopy = (context: CanvasRenderingContext2D, image: HTMLImageElement) => {
     return () => {
       const canvas = context.canvas;
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob((blob: any) => {
+      canvas.toBlob((blob: Blob | null) => {
         try {
           if (!blob) return;
-          const nav = (typeof window !== 'undefined' ? window.navigator : null) as any;
-          if (nav && nav.clipboard && 'write' in nav.clipboard) {
+          const nav =
+            typeof window !== 'undefined'
+              ? (window.navigator as unknown as {
+                  clipboard?: { write: (items: unknown[]) => Promise<void> };
+                })
+              : null;
+          if (nav?.clipboard?.write) {
             void nav.clipboard.write([
-              new (window as any).ClipboardItem({
+              new (
+                window as unknown as { ClipboardItem: new (items: Record<string, Blob>) => unknown }
+              ).ClipboardItem({
                 [blob.type]: blob
               })
             ]);
@@ -195,7 +222,11 @@ ${svgString}`);
 
   const onDownloadPDF = async () => {
     if (typeof window === 'undefined') return;
-    (inputStateStore as any).update((s: any) => ({ ...s, panZoom: false }));
+    (
+      inputStateStore as unknown as {
+        update: (fn: (s: Record<string, unknown>) => Record<string, unknown>) => void;
+      }
+    ).update((s) => ({ ...s, panZoom: false }));
     await new Promise((resolve) => setTimeout(resolve, 1000));
     await waitForRender();
 
@@ -269,7 +300,11 @@ ${svgString}`);
       );
       printWindow.document.close();
     }
-    (inputStateStore as any).update((s: any) => ({ ...s, panZoom: true }));
+    (
+      inputStateStore as unknown as {
+        update: (fn: (s: Record<string, unknown>) => Record<string, unknown>) => void;
+      }
+    ).update((s) => ({ ...s, panZoom: true }));
     logEvent('download', { type: 'pdf' });
   };
 </script>
