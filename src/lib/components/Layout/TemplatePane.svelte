@@ -160,7 +160,7 @@
     {
       category: 'Architecture',
       name: 'Cloud Services',
-      code: `architecture-beta\n  group api(cloud)[API Gateway]\n  service db(database)[Database] in api\n  service web(internet)[Web App]\n  web:L -- R:api\n  api:L -- R:db`
+      code: `architecture-beta\n  group api(cloud)[API Gateway]\n  service gateway(server)[Gateway] in api\n  service db(database)[Database] in api\n  service web(internet)[Web App]\n  web:R -- L:gateway\n  gateway:R -- L:db`
     },
 
     {
