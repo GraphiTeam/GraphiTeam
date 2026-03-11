@@ -40,7 +40,7 @@
   const snippetAdvanced4 = `stateDiagram-v2\n  [*] --> Still\n  Still --> [*]\n  Still --> Moving\n  Moving --> Still\n  Moving --> Crash\n  Crash --> [*]`;
 
   const snippetPro1 = `%%\n{ "theme": "forest", "flowchart": { "curve": "step" } }\n%%\nflowchart TD\n  A[Start] --> B[Step 1]\n  B --> C[Step 2]\n  C --> D[End]`;
-  const snippetPro2 = `architecture-beta\n  group api(cloud)[API Gateway]\n  service db(database)[Database] in api\n  service auth(server)[Auth Service] in api\n  db:L -- R:auth`;
+  const snippetPro2 = `architecture-beta\n  group api(cloud)[API Gateway]\n  service db(database)[Database] in api\n  service web(internet)[Web App]\n  web:L -- R:api\n  api:L -- R:db`;
   const snippetPro3 = `gitGraph\n  commit\n  branch feature-a\n  checkout feature-a\n  commit id: "add login"\n  checkout main\n  merge feature-a`;
 </script>
 
