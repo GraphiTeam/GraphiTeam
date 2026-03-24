@@ -44,12 +44,12 @@
   <div class="flex flex-1 items-center gap-2">
     <MainMenu />
     <img
-      src="https://raw.githubusercontent.com/mermert1/mermert1/refs/heads/main/static/mermert-logo.png"
-      alt="MerMert Logo"
+      src="https://raw.githubusercontent.com/GraphiTeam/GraphiTeam/refs/heads/main/static/graphi-logo.png"
+      alt="GraphiTeam Logo"
       class="size-8 rounded-sm" />
     <a href="/" class="whitespace-nowrap text-accent">
       {#if !mobileToggle}
-        MerMert
+        GraphiTeam
       {/if}
       {$stateStore.viewMode === 'code' ? 'Code Editor' : 'Interactive Playground'}
     </a>

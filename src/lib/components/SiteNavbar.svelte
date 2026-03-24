@@ -79,7 +79,7 @@
         </Button>
 
         <a
-          href="https://github.com/mermert1/mermert1"
+          href="https://github.com/GraphiTeam/GraphiTeam"
           target="_blank"
           class="flex items-center gap-2 font-medium text-foreground transition-colors hover:text-primary">
           <Github class="h-4 w-4" /> GitHub
@@ -184,7 +184,7 @@
         {/if}
         <div class="my-2 border-t border-border pt-2">
           <a
-            href="https://github.com/mermert1/mermert1"
+            href="https://github.com/GraphiTeam/GraphiTeam"
             target="_blank"
             class="block flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-base font-medium text-muted-foreground hover:bg-muted hover:text-primary">
             <Github class="h-4 w-4" /> GitHub

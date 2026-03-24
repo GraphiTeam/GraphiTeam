@@ -1,8 +1,8 @@
 import { browser } from '$app/environment';
 import { Octokit } from 'octokit';
 
-const REPO_OWNER = 'mermert1';
-const REPO_NAME = 'mermert1';
+const REPO_OWNER = 'GraphiTeam';
+const REPO_NAME = 'GraphiTeam';
 const GITHUB_TOKEN_KEY = 'cms_github_token';
 
 // Use local storage to persist the token

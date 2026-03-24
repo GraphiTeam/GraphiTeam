@@ -1,6 +1,6 @@
 import { openDB, type IDBPDatabase } from 'idb';
 
-const DB_NAME = 'mermert-handles';
+const DB_NAME = 'graphi-handles';
 const STORE_NAME = 'roots';
 const SITE_STORE_NAME = 'site-files';
 

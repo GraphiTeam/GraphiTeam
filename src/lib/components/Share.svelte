@@ -1,6 +1,5 @@
 <script>
   import { buttonVariants } from '$/components/ui/button';
-  import { Button } from '$/components/ui/button';
   import * as Dialog from '$/components/ui/dialog';
   import ShareIcon from '~icons/material-symbols/share';
   import CopyInput from './CopyInput.svelte';
@@ -23,7 +22,7 @@
         <h2 class="flex items-center gap-2">
           <img
             class="size-5"
-            src="https://raw.githubusercontent.com/mermert1/Assets/refs/heads/main/graphilogo.png"
+            src="https://raw.githubusercontent.com/GraphiTeam/Assets/refs/heads/main/graphilogo.png"
             alt="Graphi" />
           Graphi
         </h2>

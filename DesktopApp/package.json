@@ -3,7 +3,7 @@
   "version": "1.4.1",
   "description": "Desktop version of Graphi Live Editor",
   "main": "main.js",
-  "homepage": "https://github.com/mermert1/mermert1",
+  "homepage": "https://github.com/GraphiTeam/GraphiTeam",
   "author": "Graphi Team <support@graphi.app>",
   "scripts": {
     "start": "electron .",

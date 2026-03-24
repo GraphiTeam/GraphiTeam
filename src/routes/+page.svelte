@@ -251,7 +251,7 @@
             <div class="relative z-10 flex flex-col justify-center gap-6 md:flex-row">
               <!-- Windows -->
               <a
-                href="https://github.com/mermert1/mermert1/releases/latest/download/Graphi-Desktop-Win-Installer.exe"
+                href="https://github.com/GraphiTeam/GraphiTeam/releases/latest/download/Graphi-Desktop-Win-Installer.exe"
                 target="_blank"
                 class="group flex flex-1 flex-col items-center gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/20">
                 <Monitor
@@ -264,7 +264,7 @@
 
               <!-- macOS -->
               <a
-                href="https://github.com/mermert1/mermert1/releases/latest/download/Graphi-Desktop-macOS.dmg"
+                href="https://github.com/GraphiTeam/GraphiTeam/releases/latest/download/Graphi-Desktop-macOS.dmg"
                 target="_blank"
                 class="group flex flex-1 flex-col items-center gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/20">
                 <svg
@@ -283,7 +283,7 @@
 
               <!-- Linux -->
               <a
-                href="https://github.com/mermert1/mermert1/releases/latest/download/Graphi-Desktop-Linux.AppImage"
+                href="https://github.com/GraphiTeam/GraphiTeam/releases/latest/download/Graphi-Desktop-Linux.AppImage"
                 target="_blank"
                 class="group flex flex-1 flex-col items-center gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/20">
                 <svg
@@ -347,7 +347,7 @@
 
         <div class="flex gap-4">
           <a
-            href="https://github.com/mermert1/mermert1"
+            href="https://github.com/GraphiTeam/GraphiTeam"
             target="_blank"
             class="flex items-center gap-2 text-muted-foreground transition-colors hover:text-indigo-600 dark:hover:text-indigo-400">
             <Github class="h-5 w-5" /> Code on GitHub

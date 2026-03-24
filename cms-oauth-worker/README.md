@@ -30,9 +30,9 @@ Because Graphi is hosted on GitHub Pages (which only serves static files), we ne
    ```yaml
    backend:
      name: github
-     repo: mermert1/mermert1
+     repo: GraphiTeam/GraphiTeam
      branch: main
      base_url: https://<YOUR_WORKER_URL>.workers.dev
    ```
 
-That's it! Now when you visit `https://mermert1.github.io/mermert1/admin`, you can click "Login with GitHub", authorize the app, and start managing your content!
+That's it! Now when you visit `https://GraphiTeam.github.io/GraphiTeam/admin`, you can click "Login with GitHub", authorize the app, and start managing your content!

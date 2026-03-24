@@ -9,7 +9,7 @@
   <div class="flex flex-col items-center gap-4 text-center">
     <div class="rounded-full border-2 border-primary/20 bg-primary/10 p-4 shadow-lg">
       <img
-        src="https://raw.githubusercontent.com/mermert1/Assets/refs/heads/main/graphilogo.png"
+        src="https://raw.githubusercontent.com/GraphiTeam/Assets/refs/heads/main/graphilogo.png"
         alt="Graphi"
         class="size-16 object-contain" />
     </div>

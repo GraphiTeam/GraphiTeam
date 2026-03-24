@@ -91,7 +91,7 @@
   <Popover.Trigger
     class="shrink-0 rounded-md p-1 transition-colors outline-none hover:bg-muted focus:ring-2 focus:ring-primary">
     <img
-      src="https://raw.githubusercontent.com/mermert1/Assets/refs/heads/main/graphilogo.png"
+      src="https://raw.githubusercontent.com/GraphiTeam/Assets/refs/heads/main/graphilogo.png"
       alt="Menu"
       class="size-6 object-contain" />
   </Popover.Trigger>

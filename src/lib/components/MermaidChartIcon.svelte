@@ -6,5 +6,5 @@
 
 <img
   class={['size-4', className]}
-  src="https://raw.githubusercontent.com/mermert1/mermert1/refs/heads/main/static/mermaidchart-logo.svg"
+  src="https://raw.githubusercontent.com/GraphiTeam/GraphiTeam/refs/heads/main/static/mermaidchart-logo.svg"
   alt="Mermaid Chart" />

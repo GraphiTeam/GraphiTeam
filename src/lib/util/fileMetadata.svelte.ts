@@ -4,9 +4,9 @@ export interface FileMetadata {
   icon?: string;
 }
 
-const STORAGE_KEY = 'mermert-file-metadata';
-const EXPANSION_KEY = 'mermert-explorer-expansion';
-const UI_KEY = 'mermert-ui-state';
+const STORAGE_KEY = 'graphi-file-metadata';
+const EXPANSION_KEY = 'graphi-explorer-expansion';
+const UI_KEY = 'graphi-ui-state';
 
 // Svelte 5 Reactive Metadata
 export const fileMetadata = $state<Record<string, FileMetadata>>(
